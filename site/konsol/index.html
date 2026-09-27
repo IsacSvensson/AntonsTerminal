@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#140c1c" />
+    <title>QR Console</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <script type="module" crossorigin src="./assets/index-Br--l9NF.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BkZQSzcK.css">
+  </head>
+  <body>
+    <header>
+      <h1>QR&nbsp;Console</h1>
+      <nav>
+        <button id="nav-library" type="button">Library</button>
+        <button id="nav-scan" type="button">Scan</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="screen-library" class="screen">
+        <ul id="library-list" aria-label="Stored cartridges"></ul>
+        <p id="library-empty" class="hint">No cartridges yet. Tap <b>Scan</b> and point the camera at an animated QR code.</p>
+        <label class="file-load">Load a .qrc file <input id="file-input" type="file" accept=".qrc,application/octet-stream" /></label>
+      </section>
+
+      <section id="screen-scan" class="screen" hidden>
+        <div class="viewfinder"><video id="scan-video" playsinline muted></video></div>
+        <progress id="scan-progress" max="1" value="0"></progress>
+        <p id="scan-status" aria-live="polite">Starting camera…</p>
+        <p id="scan-detail" class="hint"></p>
+        <div class="row">
+          <button id="scan-play" type="button" class="primary" hidden>PLAY</button>
+          <button id="scan-cancel" type="button">Stop</button>
+        </div>
+      </section>
+
+      <section id="screen-play" class="screen" hidden>
+        <div class="screen-wrap"><canvas id="play-canvas" width="128" height="128"></canvas></div>
+        <p id="play-title" class="hint"></p>
+        <div class="pad" aria-label="Touch controls">
+          <div class="dpad">
+            <button data-btn="4" class="up" aria-label="Up">▲</button>
+            <button data-btn="1" class="left" aria-label="Left">◀</button>
+            <button data-btn="2" class="right" aria-label="Right">▶</button>
+            <button data-btn="8" class="down" aria-label="Down">▼</button>
+          </div>
+          <div class="ab">
+            <button data-btn="32" class="b" aria-label="B">B</button>
+            <button data-btn="16" class="a" aria-label="A">A</button>
+          </div>
+        </div>
+        <p class="hint keys">Keys: arrows · A = Z / Space · B = X</p>
+      </section>
+    </main>
+  </body>
+</html>
