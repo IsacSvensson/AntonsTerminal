@@ -72,7 +72,7 @@ export class Printer {
     this.skipLine = false;
     text = String(text ?? '');
     let el;
-    if (this.instantMode || voice === 'u' || voice === 'e' || voice === 'n') {
+    if (this.instantMode || step.flash || voice === 'u' || voice === 'e' || voice === 'n') {
       el = this.instant(voice, step.cut ? text.slice(0, Math.floor(text.length * step.cut)) : text, step);
     } else if (voice === 'p') {
       el = this.instant(voice, text, { ...step, cls: 'fadein' });
