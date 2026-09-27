@@ -58,3 +58,18 @@ test('375 px: ingen horisontell scroll, Codex-typsnittet och sifferfallback', as
 
   await page.screenshot({ path: new URL(`${info.project.name}-375.png`, SHOTS).pathname.replace(/^\/(\w:)/, '$1') });
 });
+
+test('inmatningen syns när den synliga ytan krymper (tangentbord)', async ({ page }) => {
+  await useFixture(page);
+  await open(page);
+  await page.locator('#in').focus();
+  await page.setViewportSize({ width: 375, height: 330 });
+  await page.waitForFunction(() => Math.abs(document.querySelector('#term').getBoundingClientRect().height - visualViewport.height) < 1);
+  const box = await page.locator('#in').boundingBox();
+  const vv = await page.evaluate(() => ({ top: visualViewport.offsetTop, h: visualViewport.height }));
+  expect(box.y).toBeGreaterThanOrEqual(vv.top);
+  expect(box.y + box.height).toBeLessThanOrEqual(vv.top + vv.h + 0.5);
+  // sista utskriften syns ovanför inmatningen
+  const last = await page.locator('#out > .ln').last().boundingBox();
+  expect(last.y + last.height).toBeLessThanOrEqual(box.y);
+});

@@ -6,8 +6,34 @@ import { makeHandler } from './commands.js';
 
 const $ = (s) => document.querySelector(s);
 
+/**
+ * Håller terminalen inom det synliga området när mobilens tangentbord är uppe.
+ * (iOS Safari och Chrome krymper bara den synliga ytan, inte layouten, så inmatningen hamnar annars bakom
+ * tangentbordet.)
+ */
+function fitToVisualViewport(term, screen) {
+  const vv = globalThis.visualViewport;
+  if (!vv) return;
+  let frame = 0;
+  const apply = () => {
+    frame = 0;
+    const atBottom = screen.scrollHeight - screen.scrollTop - screen.clientHeight < 40;
+    term.style.height = `${vv.height}px`;
+    term.style.transform = `translateY(${vv.offsetTop}px)`;
+    if (atBottom) screen.scrollTop = screen.scrollHeight;
+  };
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(apply);
+  };
+  vv.addEventListener('resize', schedule);
+  vv.addEventListener('scroll', schedule);
+  $('#in').addEventListener('focus', () => setTimeout(schedule, 300));
+  apply();
+}
+
 async function boot() {
   const screen = $('#screen');
+  fitToVisualViewport($('#term'), screen);
   const printer = new Printer($('#out'), screen);
   const testMode = location.hash === '#test';
   try {
