@@ -1,0 +1,15 @@
+{
+  "name": "terminal",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test \"test/unit/*.test.mjs\"",
+    "test:e2e": "playwright test",
+    "fixture": "node test/fixtures/build.mjs",
+    "serve": "node test/serve.mjs site 4173"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}

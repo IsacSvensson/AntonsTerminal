@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0d0c" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>millarossli</title>
+    <link rel="icon" href="favicon.png" />
+    <link rel="preload" href="fonts/codex.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="css/terminal.css" />
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <main id="term">
+      <div id="screen">
+        <div id="out" aria-live="polite"></div>
+      </div>
+      <form id="line" autocomplete="off">
+        <label for="in" class="ps1">&gt;</label>
+        <input
+          id="in"
+          name="in"
+          type="text"
+          enterkeyhint="send"
+          autocapitalize="off"
+          autocorrect="off"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </form>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,191 @@
+{
+  "answers": {
+    "41": "KANEL",
+    "43": "ÄPPLE",
+    "47": "PÄRON",
+    "53": "PLOMMON",
+    "59": "KATT",
+    "61": "FEM SEX SJU"
+  },
+  "assets": {
+    "00000000000000a1": { "lock": "59", "src": "tiny.gif" },
+    "00000000000000a2": { "lock": "59", "src": "fake-a.qrc" },
+    "00000000000000b1": { "lock": "61", "src": "tiny.gif" },
+    "00000000000000b2": { "lock": "61", "src": "fake-b.qrc" }
+  },
+  "content": {
+    "v": 1,
+    "public": {
+      "intro": [
+        { "v": "a", "t": "Hej testare." },
+        { "v": "a", "t": "Skriv svar 41 och ordet." }
+      ],
+      "greet": [{ "v": "a", "t": "Välkommen åter." }],
+      "msg": {
+        "unknown": "Okänt kommando.",
+        "wrong": ["Nej.", "Fel.", "Inte det."],
+        "notMine": "Inte här.",
+        "first41": "Börja med första.",
+        "notYet": "Inte än.",
+        "open": "Redan öppen.",
+        "patience": "Vänta.",
+        "noInverse": "ingen invers",
+        "noKeys": "Inga nycklar.",
+        "noKey": "Saknas:",
+        "range": "Utanför.",
+        "syntax": "Syntax:"
+      },
+      "help": [
+        { "c": "hjälp", "d": "listar kommandon" },
+        { "c": "svar <sida> <svar>", "d": "provar ett svar" },
+        { "c": "nycklar", "d": "visar nycklar" },
+        { "c": "nyckel <uttryck>", "d": "räknar uttryck" },
+        { "c": "meddelanden", "d": "visar allt igen" },
+        { "c": "ledtråd [sida]", "d": "ger en ledtråd" },
+        { "c": "rensa", "d": "tömmer skärmen" },
+        { "c": "bas <tal> <från> <till>", "tool": "bas" },
+        { "c": "ascii <tal…>", "tool": "ascii" },
+        { "c": "xor <värden…> --nyckel <text>", "tool": "xor" },
+        { "c": "powmod <a> <b> <n>", "tool": "powmod" },
+        { "c": "modinv <a> <m>", "tool": "modinv" }
+      ],
+      "cmds": {
+        "vem": { "steps": [{ "v": "a", "t": "testperson" }] },
+        "ps": { "steps": [{ "v": "a", "t": "PID  NAMN" }, { "v": "a", "t": "1  test" }] },
+        "kill": { "steps": [{ "v": "a", "t": "Vem då?" }] },
+        "kill test": { "steps": [{ "v": "a", "t": "Nix." }] },
+        "faktor": { "steps": [{ "v": "a", "t": "Själv." }] }
+      },
+      "locks": {
+        "41": { "prev": null },
+        "43": { "prev": "41", "gates": [["41", "first41"]] },
+        "47": { "prev": "41", "gates": [["41", "first41"]] },
+        "53": { "prev": "41", "gates": [["41", "first41"]] },
+        "59": { "prev": "53", "via": "xor", "gates": [["41", "first41"], ["53", "notYet"]] },
+        "61": {
+          "prev": "59",
+          "gates": [["41", "first41"], ["43", "notYet"], ["47", "notYet"], ["53", "notYet"], ["59", "notYet"]]
+        }
+      },
+      "hints": {
+        "41": {
+          "lines": ["Fixtur ledtråd ett.", "Fixtur ledtråd två.", "Fixtur ledtråd tre."],
+          "unlock": { "2": ["ascii"] }
+        }
+      },
+      "hintGate": { "41": null, "43": "41", "47": "41", "53": "41", "59": "53", "61": "59" },
+      "cooldownMin": [0, 10, 15],
+      "errorsPlain": 3
+    },
+    "locks": {
+      "41": {
+        "key": { "page": 41, "value": "KORT" },
+        "unlock": ["bas", "ascii"],
+        "steps": [
+          { "v": "a", "t": "Första låset öppet." },
+          { "v": "a", "t": "Nyckel: KORT" }
+        ],
+        "hints": {
+          "43": { "lines": ["F43 ett.", "F43 två.", "F43 tre."] },
+          "47": { "lines": ["F47 ett.", "F47 två.", "F47 tre."] },
+          "53": { "lines": ["F53 ett.", "F53 två.", "F53 tre."] }
+        },
+        "all": { "id": "trio", "need": ["43", "47", "53"], "steps": [{ "v": "a", "t": "Alla tre klara." }] }
+      },
+      "43": {
+        "key": { "page": 43, "value": "SKOG" },
+        "steps": [{ "v": "a", "t": "Andra låset." }, { "v": "a", "t": "Nyckel: SKOG" }]
+      },
+      "47": {
+        "key": { "page": 47, "value": "BERG" },
+        "steps": [{ "v": "a", "t": "Tredje låset." }, { "v": "a", "t": "Nyckel: BERG" }]
+      },
+      "53": {
+        "key": { "page": 53, "value": "TORN" },
+        "unlock": ["xor"],
+        "steps": [{ "v": "a", "t": "Fjärde låset." }, { "v": "a", "t": "Nyckel: TORN" }],
+        "hints": {
+          "59": {
+            "v": "b",
+            "pre": [{ "v": "a", "t": "Inte här." }, { "fx": "wait", "ms": 500 }],
+            "lines": ["F59 ett.", "F59 två.", "F59 tre."]
+          }
+        }
+      },
+      "59": {
+        "event": "ev59",
+        "unlock": ["powmod", "modinv"],
+        "steps": [
+          { "v": "a", "t": "Nu ska vi se", "cut": 0.6 },
+          { "fx": "glitch", "ms": 1500 },
+          { "v": "b", "t": "Andra rösten här." },
+          { "v": "b", "t": "Spela på ", "link": { "t": "konsolen", "href": "konsol/" } },
+          {
+            "fx": "asset",
+            "lock": "59",
+            "gif": "00000000000000a1",
+            "qrc": "00000000000000a2",
+            "dl": "test-a.qrc",
+            "label": "ladda ner",
+            "note": "Notering för mobil."
+          },
+          { "v": "b", "t": "Slut. /B" },
+          { "v": "a", "t": "Tillbaka." }
+        ],
+        "hints": { "61": { "lines": ["F61 ett.", "F61 två.", "F61 tre."] } },
+        "help": [{ "c": "extra", "d": "visar filen igen", "v": "b" }],
+        "cmds": {
+          "extra": {
+            "steps": [
+              {
+                "fx": "asset",
+                "lock": "59",
+                "gif": "00000000000000a1",
+                "qrc": "00000000000000a2",
+                "dl": "test-a.qrc",
+                "label": "ladda ner"
+              }
+            ]
+          },
+          "vem": {
+            "steps": [{ "v": "a", "t": "testperson" }],
+            "alt": { "every": 3, "steps": [{ "v": "b", "t": "annan person", "flash": 150 }] }
+          },
+          "ps": {
+            "steps": [{ "v": "a", "t": "PID  NAMN" }, { "v": "a", "t": "1  test" }, { "v": "a", "t": "1  annan  borta" }]
+          },
+          "kill test": { "steps": [{ "v": "b", "t": "Försök igen." }] }
+        },
+        "flicker": { "every": 6 }
+      },
+      "61": {
+        "event": "ev61",
+        "steps": [
+          { "v": "a", "t": "…" },
+          { "fx": "wait", "ms": 2000 },
+          { "fx": "transform", "ms": 5000 },
+          { "v": "p", "t": "Brevrad ett." },
+          { "v": "p", "t": "Brevrad två." },
+          { "v": "p", "t": "En sista fil." },
+          {
+            "fx": "asset",
+            "lock": "61",
+            "gif": "00000000000000b1",
+            "qrc": "00000000000000b2",
+            "dl": "test-b.qrc",
+            "label": "ladda ner"
+          }
+        ],
+        "cmds": {
+          "vem": { "steps": [{ "v": "p", "t": "alla" }] },
+          "ps": { "steps": [{ "v": "p", "t": "PID  NAMN" }, { "v": "p", "t": "1  test+annan" }] },
+          "kill": { "steps": [{ "v": "p", "t": "Ingen kvar." }] },
+          "kill test": { "steps": [{ "v": "p", "t": "Ingen kvar." }] }
+        },
+        "flicker": null,
+        "plain": true,
+        "greet": [{ "v": "p", "t": "Välkommen åter." }]
+      }
+    }
+  }
+}

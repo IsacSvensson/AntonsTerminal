@@ -1,0 +1,212 @@
+@font-face {
+  font-family: 'Codex';
+  src: url('../fonts/codex.woff2') format('woff2');
+  font-display: block;
+}
+
+:root {
+  --bg: #0b0d0c;
+  --fg: #d9e1d6;
+  --dim: #7f8b82;
+  --blue: #6fa4ff;
+  --line: #1c221e;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+  --codex: 'Codex', var(--mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  font: 16px/1.55 var(--mono);
+  overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+#term {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+#screen {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 8px
+    max(16px, env(safe-area-inset-left));
+  overscroll-behavior: contain;
+}
+
+.ln {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-height: 1.55em;
+  margin: 0 0 0.15em;
+}
+
+/* huvudrösten */
+.va {
+  font-family: var(--codex);
+  font-size: 19px;
+  letter-spacing: 0.03em;
+}
+
+/* andra rösten */
+.vb {
+  color: var(--blue);
+}
+
+.vu {
+  color: var(--dim);
+  margin-top: 0.6em;
+}
+
+.ve {
+  color: var(--dim);
+}
+
+.vn {
+  font-variant-numeric: tabular-nums;
+}
+
+.vp {
+  margin: 0 0 0.7em;
+}
+
+.fadein {
+  animation: fadein 1.2s ease both;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+}
+
+.cut {
+  display: inline-block;
+  clip-path: inset(0 55% 0 0);
+}
+
+.flk {
+  font-family: var(--mono);
+  color: var(--blue);
+  font-size: 16px;
+}
+
+/* glitch */
+.lat,
+.lat * {
+  font-family: var(--mono) !important;
+  font-size: 16px;
+}
+
+.inv {
+  filter: invert(1);
+}
+
+.glitch-soft #out {
+  animation: soft 0.35s ease 2;
+}
+
+@keyframes soft {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.ln {
+  transition: none;
+}
+
+/* förvandlingen */
+.merging .vb,
+.merging .flk {
+  color: var(--fg);
+  transition: color 4.5s ease;
+}
+
+.va .ch.lat {
+  font-size: 16px;
+}
+
+.plain .va {
+  font-family: var(--mono);
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+.plain .vb,
+.plain .flk {
+  color: var(--fg);
+}
+
+/* kassetter */
+.asset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6em;
+  margin: 0.8em 0;
+}
+
+.asset .qr {
+  image-rendering: pixelated;
+  width: min(100%, 420px);
+  min-width: min(280px, 100%);
+  height: auto;
+  background: #fff;
+}
+
+a {
+  color: var(--blue);
+}
+
+.dl {
+  font-family: var(--mono);
+}
+
+#line {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 10px max(16px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.ps1 {
+  color: var(--dim);
+}
+
+#in {
+  flex: 1;
+  min-width: 0;
+  font: 16px var(--mono);
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  caret-color: var(--fg);
+  padding: 4px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fadein {
+    animation: none;
+  }
+}

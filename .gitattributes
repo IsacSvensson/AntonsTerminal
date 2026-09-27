@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.woff2 binary
+*.gif binary
+*.png binary
+*.bin binary
+*.qrc binary
