@@ -166,6 +166,31 @@ test('ledtrådar med väntetider, spärrar och andra rösten', async ({ page }) 
   expect(await lastLine(page)).toBe('F59 ett.');
 });
 
+test('test visa: granskning med lösenord, utan att röra tillståndet', async ({ page }) => {
+  await open(page, '#test');
+  await run(page, 'test snabb');
+  const wrong = await run(page, 'test visa gissat ord ett');
+  expect(wrong.at(-1)).toBe('visa: fel lösenord');
+  // lösenordet ekas aldrig
+  await expect(page.locator('#out')).not.toContainText('gissat ord ett');
+  await expect(page.locator('#out .vu').last()).toHaveText('> test visa ••••');
+  const all = (await run(page, `test visa ${fixture.reviewPassword}`)).join('\n');
+  for (const id of ['41', '43', '47', '53', '59', '61']) expect(all).toContain(`── lås ${id} ──`);
+  expect(all).toContain('b: Andra rösten här.');
+  expect(all).toContain('p: Brevrad två.');
+  expect(all).toContain('ledtråd 59:3 (b): F59 tre.');
+  expect(all).toContain('── slut ──');
+  await expect(page.locator('#out')).not.toContainText(fixture.reviewPassword);
+  // inget är löst eller upplåst
+  const status = (await run(page, 'test status')).join('\n');
+  expect(status).toContain('lösta: []');
+  expect(await run(page, 'bas 1 10 2')).toEqual(['Okänt kommando.']);
+  // utan #test finns kommandot inte
+  await page.goto('./');
+  await idle(page);
+  expect(await run(page, `test visa ${fixture.reviewPassword}`)).toEqual(['Okänt kommando.']);
+});
+
 test('norm ger samma resultat i webbläsaren som i Node', async ({ page }) => {
   await open(page);
   const { norm } = await import('../../site/js/crypto.js');

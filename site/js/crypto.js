@@ -94,6 +94,18 @@ export async function decryptFile(keyBytes, file) {
   return decryptBytes(keyBytes, file.subarray(0, IV_BYTES), file.subarray(IV_BYTES));
 }
 
+/** Granskningsdelen: låsnycklarna krypterade med en nyckel ur ett separat lösenord (fler varv). */
+export const REVIEW_ITERATIONS = 600000;
+
+export async function reviewKey(password, iterations = REVIEW_ITERATIONS) {
+  return deriveKey(password, 'review', null, iterations);
+}
+
+export async function packReview(keys, password, iterations = REVIEW_ITERATIONS) {
+  const k = await reviewKey(password, iterations);
+  return encryptJSON(k, { keys: Object.fromEntries(Object.entries(keys).map(([id, v]) => [id, toB64(v)])) });
+}
+
 /**
  * Bygger den krypterade innehållsfilen.
  * plain   = { v, public, locks: { id: {...} } }

@@ -3,7 +3,7 @@
 import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { packContent, encryptFile } from '../../site/js/crypto.js';
+import { packContent, packReview, encryptFile } from '../../site/js/crypto.js';
 
 const dir = dirname(fileURLToPath(import.meta.url));
 
@@ -16,6 +16,7 @@ const RAW = {
 
 const fx = JSON.parse(await readFile(join(dir, 'content.test.json'), 'utf8'));
 const { enc, keys } = await packContent(fx.content, fx.answers);
+if (fx.reviewPassword) enc.review = await packReview(keys, fx.reviewPassword);
 await writeFile(join(dir, 'content.test.enc.json'), JSON.stringify(enc, null, 1) + '\n');
 
 const out = join(dir, 'assets');

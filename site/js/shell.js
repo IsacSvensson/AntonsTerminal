@@ -50,11 +50,13 @@ export class Shell {
     this.input.value = '';
     if (!value.trim()) return;
     if (this.busy) this.printer.skipAll = true;
-    this.history.push(value);
+    // lösenord visas aldrig på skärmen eller i historiken
+    const shown = value.replace(/^(\s*test\s+visa\s+).+$/i, '$1••••');
+    this.history.push(shown);
     this.hIdx = this.history.length;
     this.enqueue(async () => {
       this.printer.skipAll = false;
-      this.printer.instant('u', '> ' + value);
+      this.printer.instant('u', '> ' + shown);
       await this.onCommand(value);
     });
   }

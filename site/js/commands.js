@@ -1,7 +1,7 @@
 // Kommandotolken.
 
 import { ToolError, evalNyckel, bas, ascii, xor, powmod, modinv } from './tools.js';
-import { norm } from './crypto.js';
+import { norm, reviewKey, decryptJSON, fromB64 } from './crypto.js';
 import { saveState, clearState } from './state.js';
 import { openLock, replay, hint, hintList } from './events.js';
 
@@ -110,9 +110,59 @@ export function makeHandler(ctx) {
       await num(`snabb: ${printer.fast ? 'på' : 'av'}`);
     } else if (sub === 'glitch') {
       await printer.glitch(1500);
+    } else if (sub === 'visa') {
+      await review(args.slice(1).join(' '));
     } else {
-      await num('test status | reset | snabb | glitch');
+      await num('test status | reset | snabb | glitch | visa <lösenord>');
     }
+  }
+
+  /** Granskning: skriver ut allt innehåll i klartext utan att röra tillståndet. */
+  async function review(password) {
+    const box = story.enc.review;
+    if (!box) return num('visa: ingen granskningsdel i innehållet');
+    if (!password) return num('visa: lösenord saknas');
+    await num('visa: kontrollerar …');
+    const r = await decryptJSON(await reviewKey(password), box);
+    if (!r) return num('visa: fel lösenord');
+    const show = (s) => {
+      if (s.fx === 'asset') return printer.instant('n', `   [fil ${s.dl ?? ''}${s.label ? ' · ' + s.label : ''}${s.note ? ' · ' + s.note : ''}]`);
+      if (s.fx) return printer.instant('n', `   [${s.fx}${s.ms ? ' ' + s.ms + ' ms' : ''}]`);
+      const link = s.link ? s.link.t : '';
+      const tags = [s.cut ? 'avbruten' : '', s.flash ? 'blinkar' : ''].filter(Boolean).join(', ');
+      return printer.instant('n', `${s.v}: ${s.t ?? ''}${link}${tags ? `  (${tags})` : ''}`);
+    };
+    const pub = story.pub;
+    printer.instant('n', '── offentligt ──');
+    for (const s of pub.intro ?? []) show(s);
+    for (const h of Object.values(pub.hints ?? {})) for (const t of h.lines) printer.instant('n', `ledtråd: ${t}`);
+    for (const id of Object.keys(story.enc.locks)) {
+      const key = r.keys[id];
+      const c = key ? await decryptJSON(fromB64(key), story.enc.locks[id]) : null;
+      printer.instant('n', `── lås ${id} ──`);
+      if (!c) {
+        printer.instant('n', '(kunde inte dekrypteras)');
+        continue;
+      }
+      if (c.key) printer.instant('n', `nyckel: ${c.key.page} ${c.key.value}`);
+      if (c.unlock) printer.instant('n', `låser upp: ${c.unlock.join(', ')}`);
+      for (const s of c.steps ?? []) show(s);
+      if (c.all) {
+        printer.instant('n', `när ${c.all.need.join(', ')} är lösta:`);
+        for (const s of c.all.steps) show(s);
+      }
+      for (const [page, h] of Object.entries(c.hints ?? {})) {
+        for (const s of h.pre ?? []) show(s);
+        h.lines.forEach((t, i) => printer.instant('n', `ledtråd ${page}:${i + 1} (${h.v ?? 'a'}): ${t}`));
+      }
+      for (const [name, spec] of Object.entries(c.cmds ?? {})) {
+        printer.instant('n', `kommando ${name}:`);
+        for (const s of spec.alt?.steps ?? []) show(s);
+        for (const s of spec.steps ?? []) show(s);
+      }
+      for (const s of c.greet ?? []) show(s);
+    }
+    printer.instant('n', '── slut ──');
   }
 
   return async function handle(input) {
