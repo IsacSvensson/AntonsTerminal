@@ -270,6 +270,7 @@ export class Printer {
         else if (s.fx === 'wait') await this.wait(s.ms ?? 500);
         else if (s.fx === 'glitch') await this.glitch(s.ms);
         else if (s.fx === 'transform') await this.transform(s.ms);
+        else if (s.fx === 'logo') await this.onLogo?.(s);
       } else if (replay) {
         if (!s.flash) this.instant(s.v, s.cut ? s.t.slice(0, Math.floor(s.t.length * s.cut)) : s.t, s);
       } else {

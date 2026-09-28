@@ -11,6 +11,8 @@ export function emptyState() {
     events: [], // körda händelser
     hints: {}, // sida → { n: antal nivåer, t: tidpunkt för senaste }
     counters: {}, // räknare för kommandon med varianter
+    startedAt: null, // T+-klockan: första introt
+    finishedAt: null, // T+-klockan stannar här om innehållet säger det
   };
 }
 

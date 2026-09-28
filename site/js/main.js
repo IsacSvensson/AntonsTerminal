@@ -3,6 +3,7 @@ import { Printer } from './render.js';
 import { Shell } from './shell.js';
 import { Story, applyMode } from './events.js';
 import { makeHandler } from './commands.js';
+import { Hud } from './hud.js';
 
 const $ = (s) => document.querySelector(s);
 
@@ -56,7 +57,14 @@ async function boot() {
   const story = new Story(enc, state);
   await story.restore();
   const ctx = { state, story, printer, testMode };
+  // T+-klockan: startar första gången introt visas (äldre tillstånd utan starttid startar nu)
+  if (!state.startedAt) {
+    state.startedAt = Date.now();
+    saveState(state);
+  }
+  ctx.hud = new Hud($('#hud'), ctx);
   printer.assetLoader = (step) => story.loadAsset(step);
+  printer.onLogo = () => ctx.hud.update({ logo: 'animate' });
   applyMode(ctx);
 
   const handle = makeHandler(ctx);

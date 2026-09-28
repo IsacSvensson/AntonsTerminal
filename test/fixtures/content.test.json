@@ -17,6 +17,8 @@
   "content": {
     "v": 1,
     "public": {
+      "hud": [[{ "v": "a", "t": "fall 2000-01-01" }], [{ "v": "a", "t": "från test" }]],
+      "logo": { "circles": [{ "cx": 32, "cy": 22, "r": 10, "color": "brass" }] },
       "intro": [
         { "v": "a", "t": "Hej testare." },
         { "v": "a", "t": "Skriv svar 41 och ordet." }
@@ -116,9 +118,19 @@
       "59": {
         "event": "ev59",
         "unlock": ["powmod", "modinv"],
+        "hud": [[{ "v": "a", "t": "fall 2000-01-01" }], [{ "v": "a", "t": "från test" }, { "v": "b", "t": " / b" }]],
+        "logo": {
+          "circles": [
+            { "cx": 16, "cy": 22, "r": 8, "color": "brass" },
+            { "cx": 48, "cy": 22, "r": 8, "color": "blue", "dash": true, "flicker": true }
+          ],
+          "morphMs": 300
+        },
+        "progress": { "59": "blue" },
         "steps": [
           { "v": "a", "t": "Nu ska vi se", "cut": 0.6 },
           { "fx": "glitch", "ms": 1500 },
+          { "fx": "logo" },
           { "v": "b", "t": "Andra rösten här." },
           { "v": "b", "t": "Spela på ", "link": { "t": "konsolen", "href": "konsol/" } },
           {
@@ -161,10 +173,23 @@
       },
       "61": {
         "event": "ev61",
+        "hud": [[{ "v": "p", "t": "FALL 2000-01-01" }], [{ "v": "p", "t": "FRÅN SLUT" }]],
+        "logo": {
+          "circles": [
+            { "cx": 26, "cy": 22, "r": 12, "color": "brass" },
+            { "cx": 38, "cy": 22, "r": 12, "color": "brass" }
+          ],
+          "dots": [{ "cx": 32, "cy": 18, "r": 2 }, { "cx": 32, "cy": 26, "r": 2 }],
+          "morphMs": 400,
+          "dotMs": 100
+        },
+        "progress": {},
+        "clock": { "stop": true, "plain": true },
         "steps": [
           { "v": "a", "t": "…" },
           { "fx": "wait", "ms": 2000 },
           { "fx": "transform", "ms": 5000 },
+          { "fx": "logo" },
           { "v": "p", "t": "Brevrad ett." },
           { "v": "p", "t": "Brevrad två." },
           { "v": "p", "t": "En sista fil." },

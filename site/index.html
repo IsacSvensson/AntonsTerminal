@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
-    <meta name="theme-color" content="#0b0d0c" />
+    <meta name="theme-color" content="#0b0b0a" />
     <meta name="robots" content="noindex, nofollow" />
     <title>millarossli</title>
     <link rel="icon" href="favicon.png" />
@@ -13,6 +13,18 @@
   </head>
   <body>
     <main id="term">
+      <header id="hud">
+        <div class="hud-top">
+          <svg id="logo" viewBox="0 0 64 44" aria-hidden="true"></svg>
+          <div id="case"></div>
+          <div id="clock" aria-label="T+">
+            <div class="tplus">T+</div>
+            <div class="nonacci"><i></i><i></i><i></i><i></i></div>
+            <div class="tplain" hidden></div>
+          </div>
+        </div>
+        <div id="progress"></div>
+      </header>
       <div id="screen">
         <div id="out" aria-live="polite"></div>
       </div>

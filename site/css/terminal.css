@@ -5,11 +5,14 @@
 }
 
 :root {
-  --bg: #0b0d0c;
-  --fg: #d9e1d6;
-  --dim: #7f8b82;
+  --bg: #0b0b0a;
+  --panel: #141412;
+  --line: #2b2a26;
+  --fg: #ece9e1;
+  --dim: #8e8b82;
+  --brass: #c4a56c;
+  --brass-dim: #6f5f40;
   --blue: #6fa4ff;
-  --line: #1c221e;
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace;
   --codex: 'Codex', var(--mono);
 }
@@ -43,12 +46,185 @@ body {
   height: 100dvh;
 }
 
+/* huvudfältet */
+#hud {
+  flex: none;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  padding: max(10px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 8px
+    max(14px, env(safe-area-inset-left));
+}
+
+.hud-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+#logo {
+  flex: none;
+  width: 46px;
+  height: 32px;
+  color: var(--brass);
+  overflow: visible;
+}
+
+#logo circle {
+  fill: none;
+  stroke: var(--brass);
+  stroke-width: 1.7;
+  transition:
+    stroke 1.2s ease,
+    opacity 0.6s ease;
+}
+
+#logo circle.blue {
+  stroke: var(--blue);
+}
+
+#logo circle.dash {
+  stroke-dasharray: 2.4 2.2;
+}
+
+#logo circle.flicker {
+  animation: logo-flicker 20s linear infinite;
+}
+
+#logo circle.dot {
+  stroke-width: 1.6;
+  animation: dot-on 0.5s ease both;
+}
+
+#logo.fading circle {
+  opacity: 0;
+}
+
+@keyframes logo-flicker {
+  0%,
+  96%,
+  100% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.15;
+  }
+  98% {
+    opacity: 0.9;
+  }
+  99% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes dot-on {
+  from {
+    opacity: 0;
+  }
+}
+
+#case {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--dim);
+}
+
+.case-line {
+  overflow-wrap: anywhere;
+}
+
+.ha {
+  font-family: var(--codex);
+  letter-spacing: 0.03em;
+}
+
+.hb {
+  color: var(--blue);
+}
+
+.hp {
+  font-family: var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#clock {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.tplus {
+  font-size: 10.5px;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+}
+
+.nonacci {
+  display: flex;
+  gap: 2px;
+}
+
+.nonacci i {
+  display: block;
+  width: 17px;
+  height: 17px;
+  box-sizing: content-box;
+  border: 1px solid var(--line);
+  background: url('../img/nonacci.png') no-repeat;
+  background-size: 272px 272px;
+}
+
+.tplain {
+  font-size: 10.5px;
+  color: var(--dim);
+  letter-spacing: 0.08em;
+}
+
+#progress {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.seg {
+  flex: 1;
+  min-width: 0;
+  border-top: 3px solid var(--line);
+  padding-top: 4px;
+  font-size: 10.5px;
+  color: var(--dim);
+  transition:
+    border-color 0.8s ease,
+    color 0.8s ease;
+}
+
+.seg[data-state='brass'] {
+  border-top-color: var(--brass);
+  color: var(--brass);
+}
+
+.seg[data-state='blue'] {
+  border-top-color: var(--blue);
+  color: var(--blue);
+}
+
+/* testläget "klartext" gäller också ärenderaden */
+.latin .ha {
+  font-family: var(--mono);
+  letter-spacing: 0;
+}
+
 #screen {
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 8px
-    max(16px, env(safe-area-inset-left));
+  min-height: 0;
+  padding: 14px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
   overscroll-behavior: contain;
 }
 

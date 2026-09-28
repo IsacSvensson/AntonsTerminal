@@ -109,10 +109,11 @@ export class Story {
   }
 }
 
-/** Tillämpar det som beror på öppnade lås: flimmer och klartextläge. */
-export function applyMode(ctx) {
+/** Tillämpar det som beror på öppnade lås: flimmer, klartextläge och huvudfältet. */
+export function applyMode(ctx, { logo = 'static' } = {}) {
   ctx.printer.flicker = ctx.story.flicker();
   document.body.classList.toggle('plain', ctx.story.plain());
+  ctx.hud?.update({ logo });
 }
 
 /** Ett lås har öppnats: spara först, kör sedan innehållet. */
@@ -122,10 +123,12 @@ export async function openLock(ctx, id, { key, content }) {
   story.open.set(id, content);
   for (const u of content.unlock ?? []) if (!state.unlocked.includes(u)) state.unlocked.push(u);
   if (content.event && !state.events.includes(content.event)) state.events.push(content.event);
+  if (content.clock?.stop && !state.finishedAt) state.finishedAt = Date.now();
   saveState(state);
   printer.flicker = null; // händelsen skrivs utan flimmer
+  ctx.hud?.update({ logo: 'keep', lines: false }); // progressraden direkt; resten när innehållet säger till (fx logo)
   await printer.run(content.steps);
-  applyMode(ctx);
+  applyMode(ctx, { logo: content.steps?.some((s) => s.fx === 'logo') ? 'keep' : 'static' });
   await checkAll(ctx);
 }
 
