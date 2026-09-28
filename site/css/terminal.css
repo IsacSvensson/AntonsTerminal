@@ -156,6 +156,13 @@ body {
   color: var(--fg);
 }
 
+/* testläget "klartext": huvudrösten i vanlig font (rösterna behåller sina färger) */
+.latin .va {
+  font-family: var(--mono);
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
 /* kassetter */
 .asset {
   display: flex;

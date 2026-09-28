@@ -108,12 +108,21 @@ export function makeHandler(ctx) {
         /* ignorera */
       }
       await num(`snabb: ${printer.fast ? 'på' : 'av'}`);
+    } else if (sub === 'klartext') {
+      const on = !document.body.classList.contains('latin');
+      document.body.classList.toggle('latin', on);
+      try {
+        sessionStorage.setItem('cc2-latin', on ? '1' : '');
+      } catch {
+        /* ignorera */
+      }
+      await num(`klartext: ${on ? 'på' : 'av'}`);
     } else if (sub === 'glitch') {
       await printer.glitch(1500);
     } else if (sub === 'visa') {
       await review(args.slice(1).join(' '));
     } else {
-      await num('test status | reset | snabb | glitch | visa <lösenord>');
+      await num('test status | reset | snabb | klartext | glitch | visa <lösenord>');
     }
   }
 

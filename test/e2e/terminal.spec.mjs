@@ -191,6 +191,23 @@ test('test visa: granskning med lösenord, utan att röra tillståndet', async (
   expect(await run(page, `test visa ${fixture.reviewPassword}`)).toEqual(['Okänt kommando.']);
 });
 
+test('test klartext: huvudrösten i vanlig font, överlever omladdning, bara i #test', async ({ page }) => {
+  await open(page, '#test');
+  const font = () => page.locator('#out .va').first().evaluate((e) => getComputedStyle(e).fontFamily);
+  expect(await font()).toMatch(/^"?Codex/);
+  expect(await run(page, 'test klartext')).toEqual(['klartext: på']);
+  expect(await font()).not.toMatch(/Codex/);
+  await page.reload();
+  await idle(page);
+  expect(await font()).not.toMatch(/Codex/);
+  expect(await run(page, 'test klartext')).toEqual(['klartext: av']);
+  expect(await font()).toMatch(/^"?Codex/);
+  await run(page, 'test klartext');
+  await page.goto('./');
+  await idle(page);
+  expect(await font()).toMatch(/^"?Codex/);
+});
+
 test('norm ger samma resultat i webbläsaren som i Node', async ({ page }) => {
   await open(page);
   const { norm } = await import('../../site/js/crypto.js');

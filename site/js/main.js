@@ -38,6 +38,7 @@ async function boot() {
   const testMode = location.hash === '#test';
   try {
     if (testMode && sessionStorage.getItem('cc2-fast')) printer.fast = true;
+    if (testMode && sessionStorage.getItem('cc2-latin')) document.body.classList.add('latin');
   } catch {
     /* ignorera */
   }
